@@ -5,10 +5,8 @@ import 'package:justice_mango/app/data/model/recent_read.dart';
 import 'package:justice_mango/app/data/service/hive_service.dart';
 import 'package:justice_mango/app/data/service/source_service.dart';
 
-import 'widget/recent_meta_combine.dart';
-
 class RecentController extends GetxController {
-  var recentMetaCombine = <RecentMetaCombine>[].obs;
+  // var recentArgs = <RecentArgs>[].obs;
   late MangaMetaCombine mangaMetaCombine;
 
   @override
@@ -18,7 +16,7 @@ class RecentController extends GetxController {
   }
 
   renewRecent() async {
-    recentMetaCombine.clear();
+    // recentArgs.clear();
     List<RecentRead> recentReads = HiveService.getRecentReadBox();
     for (var recent in recentReads.reversed) {
       for (var repo in SourceService.allSourceRepositories) {
@@ -37,13 +35,13 @@ class RecentController extends GetxController {
       int? readIndex = mangaMetaCombine.repo
           .getLastReadIndex(mangaMetaCombine.mangaMeta.preId);
 
-      recentMetaCombine.add(
-        RecentMetaCombine(
-          mangaMetaCombine: mangaMetaCombine,
-          dateTime: recent.dateTime,
-          chapterName: chapterInfo[readIndex ?? 0].name ?? '',
-        ),
-      );
+      // recentArgs.add(
+      //   RecentArgs(
+      //     mangaMetaCombine: mangaMetaCombine,
+      //     dateTime: recent.dateTime,
+      //     chapterName: chapterInfo[readIndex ?? 0].name ?? '',
+      //   ),
+      // );
     }
   }
 }

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justice_mango/app/modules/home/tab/recent/recent_provider.dart';
 import 'package:justice_mango/app/theme/color_theme.dart';
@@ -11,7 +11,7 @@ class RecentTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recentStateProvider = ref.watch(recentProvider);
+    final recentState = ref.watch(recentProvider);
     return Scaffold(
       backgroundColor: nearlyWhite,
       body: SingleChildScrollView(
@@ -32,7 +32,7 @@ class RecentTab extends ConsumerWidget {
                     ),
               ),
             ),
-            recentStateProvider.isEmpty
+            recentState.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.all(24),
                     child: Center(
@@ -45,9 +45,9 @@ class RecentTab extends ConsumerWidget {
                 : Column(
                     //verticalDirection: VerticalDirection.up,
                     children: List.generate(
-                      recentStateProvider.length,
+                      recentState.length,
                       (index) => RecentCard(
-                        recentArgs: recentStateProvider[index],
+                        recentStateData: recentState[index],
                       ),
                     ),
                   ),

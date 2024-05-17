@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:justice_mango/app/gwidget/manga_card.dart';
 import 'package:justice_mango/app/modules/home/home_provider.dart';
 import 'package:justice_mango/app/modules/home/tab/board/board_provider.dart';
@@ -40,7 +40,7 @@ class BoardTabState extends ConsumerState<BoardTab> {
 
   @override
   Widget build(BuildContext context) {
-    final boardStateProvider = ref.watch(boardProvider);
+    final boardState = ref.watch(boardProvider);
     return SmartRefresher(
       controller: refreshController,
       enablePullDown: true,
@@ -58,7 +58,7 @@ class BoardTabState extends ConsumerState<BoardTab> {
           SliverAppBar(
             backgroundColor: nearlyWhite,
             floating: true,
-            title: _welcomeBar(boardStateProvider),
+            title: _welcomeBar(boardState),
           ),
           const SliverToBoxAdapter(
             child: Divider(),
@@ -80,14 +80,14 @@ class BoardTabState extends ConsumerState<BoardTab> {
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
             sliver: SliverList(
               delegate: SliverChildListDelegate(
-                boardStateProvider.favoriteUpdate.isEmpty
+                boardState.favoriteUpdate.isEmpty
                     ? [Text('noUpdateFound'.tr())]
                     : List.generate(
-                        boardStateProvider.favoriteUpdate.length > 5
+                        boardState.favoriteUpdate.length > 5
                             ? 5
-                            : boardStateProvider.favoriteUpdate.length,
+                            : boardState.favoriteUpdate.length,
                         (index) => MangaCard(
-                          metaCombine: boardStateProvider.favoriteUpdate[index],
+                          metaCombine: boardState.favoriteUpdate[index],
                         ),
                       ),
               ),
@@ -120,15 +120,14 @@ class BoardTabState extends ConsumerState<BoardTab> {
                 child: Row(
                   children: List<Widget>.from(
                     List.generate(
-                      boardStateProvider.sourceRepositories.length,
+                      boardState.sourceRepositories.length,
                       (index) => GestureDetector(
                         child: SourceTabChip(
-                          label:
-                              boardStateProvider.sourceRepositories[index].slug,
-                          selected: boardStateProvider.sourceSelected == index,
+                          label: boardState.sourceRepositories[index].slug,
+                          selected: boardState.sourceSelected == index,
                         ),
                         onTap: () {
-                          if (boardStateProvider.sourceSelected != index) {
+                          if (boardState.sourceSelected != index) {
                             ref
                                 .read(boardProvider.notifier)
                                 .changeSourceTab(index);
@@ -143,8 +142,8 @@ class BoardTabState extends ConsumerState<BoardTab> {
           ),
           SliverList(
             delegate: SliverChildListDelegate(
-              boardStateProvider.mangaBoard.isEmpty
-                  ? boardStateProvider.hasError
+              boardState.mangaBoard.isEmpty
+                  ? boardState.hasError
                       ? [
                           Padding(
                             padding: const EdgeInsets.all(20),
@@ -165,9 +164,9 @@ class BoardTabState extends ConsumerState<BoardTab> {
                           )
                         ]
                   : List.generate(
-                      boardStateProvider.mangaBoard.length,
+                      boardState.mangaBoard.length,
                       (index) => MangaCard(
-                        metaCombine: boardStateProvider.mangaBoard[index],
+                        metaCombine: boardState.mangaBoard[index],
                       ),
                     ),
             ),

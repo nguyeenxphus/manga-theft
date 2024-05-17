@@ -4,9 +4,20 @@ import 'package:justice_mango/app/data/model/manga_meta_combine.dart';
 import 'package:justice_mango/app/data/model/recent_read.dart';
 import 'package:justice_mango/app/data/service/hive_service.dart';
 import 'package:justice_mango/app/data/service/source_service.dart';
-import 'package:justice_mango/app/modules/home/tab/recent/widget/recent_meta_combine.dart';
 
-class RecentStateNotifier extends StateNotifier<List<RecentMetaCombine>> {
+class RecentStateData {
+  final MangaMetaCombine mangaMetaCombine;
+  final DateTime dateTime;
+  final String chapterName;
+
+  const RecentStateData({
+    required this.mangaMetaCombine,
+    required this.dateTime,
+    required this.chapterName,
+  });
+}
+
+class RecentStateNotifier extends StateNotifier<List<RecentStateData>> {
   late MangaMetaCombine mangaMetaCombine;
 
   RecentStateNotifier() : super([]) {
@@ -14,7 +25,7 @@ class RecentStateNotifier extends StateNotifier<List<RecentMetaCombine>> {
   }
 
   renewRecent() async {
-    List<RecentMetaCombine> recentMetaCombine = [];
+    List<RecentStateData> recentMetaCombine = [];
     List<RecentRead> recentReads = HiveService.getRecentReadBox();
     for (var recent in recentReads.reversed) {
       for (var repo in SourceService.allSourceRepositories) {
@@ -34,7 +45,7 @@ class RecentStateNotifier extends StateNotifier<List<RecentMetaCombine>> {
           .getLastReadIndex(mangaMetaCombine.mangaMeta.preId);
 
       recentMetaCombine.add(
-        RecentMetaCombine(
+        RecentStateData(
           mangaMetaCombine: mangaMetaCombine,
           dateTime: recent.dateTime,
           chapterName: chapterInfo[readIndex ?? 0].name ?? '',
@@ -46,5 +57,5 @@ class RecentStateNotifier extends StateNotifier<List<RecentMetaCombine>> {
 }
 
 final recentProvider =
-    StateNotifierProvider<RecentStateNotifier, List<RecentMetaCombine>>(
+    StateNotifierProvider<RecentStateNotifier, List<RecentStateData>>(
         (ref) => RecentStateNotifier());

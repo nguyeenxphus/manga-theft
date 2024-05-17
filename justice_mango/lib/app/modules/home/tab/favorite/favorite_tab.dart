@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:justice_mango/app/gwidget/short_manga_card.dart';
 import 'package:justice_mango/app/modules/home/tab/favorite/favorite_provider.dart';
 import 'package:justice_mango/app/theme/color_theme.dart';
@@ -13,7 +13,7 @@ class FavoriteTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favoriteStateProvider = ref.watch(favoriteProvider);
+    final favoriteState = ref.watch(favoriteProvider);
     return Scaffold(
       backgroundColor: nearlyWhite,
       body: SingleChildScrollView(
@@ -31,70 +31,60 @@ class FavoriteTab extends ConsumerWidget {
                 children: [
                   Text(
                     'favorites'.tr(),
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      letterSpacing: 0.27,
-                    ),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          letterSpacing: 0.27,
+                        ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.sort_rounded),
-                    onPressed: () =>
-                        ref.read(favoriteProvider.notifier)
-                            .changeFavoriteCardStyle(),
+                    onPressed: () => ref
+                        .read(favoriteProvider.notifier)
+                        .changeFavoriteCardStyle(),
                   ),
                 ],
               ),
             ),
-            favoriteStateProvider.favoriteMetaCombine.isEmpty
+            favoriteState.favoriteMetaCombine.isEmpty
                 ? Padding(
-              padding: const EdgeInsets.all(24),
-              child: Center(
-                child: Text(
-                  'dontHaveAnyFavorite'.tr(),
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium,
-                ),
-              ),
-            )
-                : (favoriteStateProvider.cardStyle ==
-                FavoriteCardStyle.shortMangaCard
-                ? MasonryGridView.count(
-              padding: const EdgeInsets.only(top: 3.0),
-              itemCount: favoriteStateProvider.favoriteMetaCombine.length,
-              crossAxisCount: 2,
-              itemBuilder: (context, index) {
-                return ShortMangaCard(
-                  metaCombine:
-                  favoriteStateProvider.favoriteMetaCombine[index],
-                );
-              },
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-            )
-                : ListView.builder(
-              itemBuilder: (context, index) {
-                return ShortMangaBar(
-                  metaCombine:
-                  favoriteStateProvider.favoriteMetaCombine[index],
-                  latestChapter: favoriteStateProvider.latestChapters[
-                  favoriteStateProvider.favoriteMetaCombine[index]
-                      .mangaMeta.url] ??
-                      "🦉",
-                );
-              },
-              itemCount: favoriteStateProvider.favoriteMetaCombine.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-
-            )),
-
+                    padding: const EdgeInsets.all(24),
+                    child: Center(
+                      child: Text(
+                        'dontHaveAnyFavorite'.tr(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  )
+                : (favoriteState.cardStyle == FavoriteCardStyle.shortMangaCard
+                    ? MasonryGridView.count(
+                        padding: const EdgeInsets.only(top: 3.0),
+                        itemCount: favoriteState.favoriteMetaCombine.length,
+                        crossAxisCount: 2,
+                        itemBuilder: (context, index) {
+                          return ShortMangaCard(
+                            metaCombine:
+                                favoriteState.favoriteMetaCombine[index],
+                          );
+                        },
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                      )
+                    : ListView.builder(
+                        itemBuilder: (context, index) {
+                          return ShortMangaBar(
+                            metaCombine:
+                                favoriteState.favoriteMetaCombine[index],
+                            latestChapter: favoriteState.latestChapters[
+                                    favoriteState.favoriteMetaCombine[index]
+                                        .mangaMeta.url] ??
+                                "🦉",
+                          );
+                        },
+                        itemCount: favoriteState.favoriteMetaCombine.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                      )),
           ],
         ),
       ),

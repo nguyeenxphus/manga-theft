@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:justice_mango/app/data/service/source_service.dart';
-import 'package:justice_mango/app/modules/home/tab/board/board_controller.dart';
 import 'package:justice_mango/app/modules/home/tab/board/board_provider.dart';
 
 class SettingBottomSheet extends StatefulWidget {
@@ -18,8 +17,8 @@ class SettingBottomSheetState extends State<SettingBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      constraints: const BoxConstraints(
-        maxHeight: 24,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height / 2,
       ),
       child: SingleChildScrollView(
         child: Consumer(
@@ -75,7 +74,6 @@ class SettingBottomSheetState extends State<SettingBottomSheet> {
                           SourceService.removeSource(source);
                         });
                       }
-                      // BoardController boardController = Get.find();
                       ref.read(boardProvider.notifier).updateSources();
                     },
                     title: Text(

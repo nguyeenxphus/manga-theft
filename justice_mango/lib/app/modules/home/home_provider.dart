@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class HomeStateNotifier extends StateNotifier<int> {
   HomeStateNotifier() : super(0);
 
-  switchToIndex(int index) {
+  void switchToIndex(int index) {
     state = index;
   }
 }

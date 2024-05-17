@@ -1,28 +1,26 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:justice_mango/app/gwidget/manga_frame.dart';
+import 'package:justice_mango/app/modules/home/tab/recent/recent_provider.dart';
 import 'package:justice_mango/app/modules/manga_detail/manga_detail_screen.dart';
 import 'package:justice_mango/app/theme/color_theme.dart';
 
-import 'recent_meta_combine.dart';
+// import 'recent_agrs.dart';
 
 class RecentCard extends StatelessWidget {
-  final RecentMetaCombine recentArgs;
+  final RecentStateData recentStateData;
 
-  const RecentCard({Key? key, required this.recentArgs}) : super(key: key);
+  const RecentCard({Key? key, required this.recentStateData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MangaDetailScreen(
-              metaCombine: recentArgs.mangaMetaCombine,
-            ),
+        Get.to(
+          () => MangaDetailScreen(
+            metaCombine: recentStateData.mangaMetaCombine,
           ),
         );
       },
@@ -44,7 +42,7 @@ class RecentCard extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(
-                    recentArgs.mangaMetaCombine.mangaMeta.imgUrl ?? ''),
+                    recentStateData.mangaMetaCombine.mangaMeta.imgUrl ?? ''),
                 fit: BoxFit.cover,
               ),
             ),
@@ -61,9 +59,9 @@ class RecentCard extends StatelessWidget {
                     Stack(
                       children: [
                         MangaFrame(
-                          imageUrl:
-                              recentArgs.mangaMetaCombine.mangaMeta.imgUrl ??
-                                  '',
+                          imageUrl: recentStateData
+                                  .mangaMetaCombine.mangaMeta.imgUrl ??
+                              '',
                           width: MediaQuery.of(context).size.width / 3,
                         ),
                         Positioned(
@@ -79,10 +77,8 @@ class RecentCard extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 0),
                             child: Text(
-                              recentArgs.mangaMetaCombine.mangaMeta.lang,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
+                              recentStateData.mangaMetaCombine.mangaMeta.lang,
+                              style: Get.textTheme.bodyMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -102,12 +98,13 @@ class RecentCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  recentArgs.mangaMetaCombine.mangaMeta.title ??
+                                  recentStateData
+                                          .mangaMetaCombine.mangaMeta.title ??
                                       '',
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Text(
-                                  recentArgs
+                                  recentStateData
                                           .mangaMetaCombine.mangaMeta.author ??
                                       '',
                                   style: Theme.of(context).textTheme.bodyMedium,
@@ -115,7 +112,7 @@ class RecentCard extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 16),
                                   child: Text(
-                                    recentArgs.mangaMetaCombine.mangaMeta
+                                    recentStateData.mangaMetaCombine.mangaMeta
                                             .description ??
                                         '',
                                     maxLines: 5,
@@ -136,11 +133,11 @@ class RecentCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'lastRead'.tr() + recentArgs.chapterName,
+                                  'lastRead'.tr + recentStateData.chapterName,
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 Text(
-                                  timeCalculate(recentArgs.dateTime),
+                                  timeCalculate(recentStateData.dateTime),
                                   style: Theme.of(context).textTheme.bodySmall,
                                 )
                               ],
@@ -162,17 +159,17 @@ class RecentCard extends StatelessWidget {
   String timeCalculate(DateTime dateTime) {
     var diffTime = DateTime.now().difference(dateTime);
     if (diffTime.inMinutes < 60) {
-      return diffTime.inMinutes.toString() + 'minutesAgo'.tr();
+      return diffTime.inMinutes.toString() + 'minutesAgo'.tr;
     } else if (diffTime.inHours < 24) {
-      return diffTime.inHours.toString() + 'hoursAgo'.tr();
+      return diffTime.inHours.toString() + 'hoursAgo'.tr;
     } else if (diffTime.inDays < 7) {
-      return diffTime.inDays.toString() + 'daysAgo'.tr();
+      return diffTime.inDays.toString() + 'daysAgo'.tr;
     } else if (diffTime.inDays < 30) {
-      return ((diffTime.inDays) ~/ 7).toString() + 'weeksAgo'.tr();
+      return ((diffTime.inDays) ~/ 7).toString() + 'weeksAgo'.tr;
     } else if (diffTime.inDays < 365) {
-      return ((diffTime.inDays) ~/ 30).toString() + 'monthsAgo'.tr();
+      return ((diffTime.inDays) ~/ 30).toString() + 'monthsAgo'.tr;
     } else {
-      return ((diffTime.inDays) ~/ 365).toString() + 'yearsAgo'.tr();
+      return ((diffTime.inDays) ~/ 365).toString() + 'yearsAgo'.tr;
     }
   }
 }

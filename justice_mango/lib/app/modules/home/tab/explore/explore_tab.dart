@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_focus_watcher/flutter_focus_watcher.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justice_mango/app/gwidget/manga_card.dart';
 import 'package:justice_mango/app/modules/home/tab/explore/explore_provider.dart';
@@ -19,7 +19,7 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
 
   @override
   Widget build(BuildContext context) {
-    final exploreStateProvider = ref.watch(exploreProvider);
+    final exploreState = ref.watch(exploreProvider);
     return Scaffold(
       backgroundColor: nearlyWhite,
       body: FocusWatcher(
@@ -77,7 +77,7 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
               ),
             ),
             SliverToBoxAdapter(
-              child: exploreStateProvider.searchComplete
+              child: exploreState.searchComplete
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -112,8 +112,8 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
               ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
-                  (exploreStateProvider.searchComplete &&
-                          exploreStateProvider.mangaSearchResult.isEmpty)
+                  (exploreState.searchComplete &&
+                          exploreState.mangaSearchResult.isEmpty)
                       ? <Widget>[
                           Text(
                             'noResult'.tr(),
@@ -122,10 +122,10 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
                         ]
                       : <Widget>[] +
                           List.generate(
-                            exploreStateProvider.mangaSearchResult.length,
+                            exploreState.mangaSearchResult.length,
                             (index) => MangaCard(
                               metaCombine:
-                                  exploreStateProvider.mangaSearchResult[index],
+                                  exploreState.mangaSearchResult[index],
                             ),
                           ),
                   addRepaintBoundaries: false,
@@ -172,16 +172,14 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
                 child: Row(
                   children: List<Widget>.from(
                     List.generate(
-                      exploreStateProvider.sourceRepositories.length,
+                      exploreState.sourceRepositories.length,
                       (index) => GestureDetector(
                         child: SourceTabChip(
-                          label: exploreStateProvider
-                              .sourceRepositories[index].slug,
-                          selected:
-                              exploreStateProvider.sourceSelected == index,
+                          label: exploreState.sourceRepositories[index].slug,
+                          selected: exploreState.sourceSelected == index,
                         ),
                         onTap: () {
-                          if (exploreStateProvider.sourceSelected != index) {
+                          if (exploreState.sourceSelected != index) {
                             ref
                                 .read(exploreProvider.notifier)
                                 .changeSourceTab(index);
@@ -199,9 +197,9 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
                   List.generate(
-                    exploreStateProvider.randomMangaList.length,
+                    exploreState.randomMangaList.length,
                     (index) => MangaCard(
-                      metaCombine: exploreStateProvider.randomMangaList[index],
+                      metaCombine: exploreState.randomMangaList[index],
                     ),
                   ),
                   addRepaintBoundaries: false,

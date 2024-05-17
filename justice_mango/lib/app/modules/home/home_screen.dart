@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:justice_mango/app/modules/home/home_provider.dart';
 import 'package:justice_mango/app/modules/home/tab/board/board_tab.dart';
 import 'package:justice_mango/app/modules/home/tab/explore/explore_tab.dart';
@@ -9,11 +9,13 @@ import 'package:justice_mango/app/modules/home/tab/recent/recent_tab.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class HomeScreen extends ConsumerWidget {
+  static const String routeName = "/home";
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    int selectedIndex = ref.watch(homeProvider);
+    final selectedIndex = ref.watch(homeProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body: IndexedStack(
