@@ -1,22 +1,31 @@
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justice_mango/app/data/model/chapter_info.dart';
 import 'package:justice_mango/app/data/model/manga_meta_combine.dart';
 import 'package:justice_mango/app/data/model/recent_read.dart';
 import 'package:justice_mango/app/data/service/hive_service.dart';
 import 'package:justice_mango/app/data/service/source_service.dart';
 
-class RecentController extends GetxController {
-  // var recentArgs = <RecentArgs>[].obs;
+class RecentStateData {
+  final MangaMetaCombine mangaMetaCombine;
+  final DateTime dateTime;
+  final String chapterName;
+
+  const RecentStateData({
+    required this.mangaMetaCombine,
+    required this.dateTime,
+    required this.chapterName,
+  });
+}
+
+class RecentStateNotifier extends StateNotifier<List<RecentStateData>> {
   late MangaMetaCombine mangaMetaCombine;
 
-  @override
-  void onInit() {
-    super.onInit();
+  RecentStateNotifier() : super([]) {
     renewRecent();
   }
 
   renewRecent() async {
-    // recentArgs.clear();
+    List<RecentStateData> recentMetaCombine = [];
     List<RecentRead> recentReads = HiveService.getRecentReadBox();
     for (var recent in recentReads.reversed) {
       for (var repo in SourceService.allSourceRepositories) {
@@ -35,13 +44,18 @@ class RecentController extends GetxController {
       int? readIndex = mangaMetaCombine.repo
           .getLastReadIndex(mangaMetaCombine.mangaMeta.preId);
 
-      // recentArgs.add(
-      //   RecentArgs(
-      //     mangaMetaCombine: mangaMetaCombine,
-      //     dateTime: recent.dateTime,
-      //     chapterName: chapterInfo[readIndex ?? 0].name ?? '',
-      //   ),
-      // );
+      recentMetaCombine.add(
+        RecentStateData(
+          mangaMetaCombine: mangaMetaCombine,
+          dateTime: recent.dateTime,
+          chapterName: chapterInfo[readIndex ?? 0].name ?? '',
+        ),
+      );
     }
+    state = [...state, ...recentMetaCombine];
   }
 }
+
+final recentProvider =
+    StateNotifierProvider<RecentStateNotifier, List<RecentStateData>>(
+        (ref) => RecentStateNotifier());

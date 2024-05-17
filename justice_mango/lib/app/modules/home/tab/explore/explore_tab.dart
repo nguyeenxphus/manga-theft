@@ -1,16 +1,25 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_focus_watcher/flutter_focus_watcher.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justice_mango/app/gwidget/manga_card.dart';
-import 'package:justice_mango/app/modules/home/tab/explore/explore_controller.dart';
+import 'package:justice_mango/app/modules/home/tab/explore/explore_provider.dart';
 import 'package:justice_mango/app/modules/home/widget/source_tab_chip.dart';
 import 'package:justice_mango/app/theme/color_theme.dart';
 
-class ExploreTab extends GetWidget<ExploreController> {
+class ExploreTab extends ConsumerStatefulWidget {
   const ExploreTab({Key? key}) : super(key: key);
 
   @override
+  ExploreTabState createState() => ExploreTabState();
+}
+
+class ExploreTabState extends ConsumerState<ExploreTab> {
+  final TextEditingController textSearchController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
+    final exploreState = ref.watch(exploreProvider);
     return Scaffold(
       backgroundColor: nearlyWhite,
       body: FocusWatcher(
@@ -31,7 +40,7 @@ class ExploreTab extends GetWidget<ExploreController> {
                       keyboardType: TextInputType.text,
                       autofocus: false,
                       decoration: InputDecoration(
-                        labelText: 'searchManga'.tr,
+                        labelText: 'searchManga'.tr(),
                         border: InputBorder.none,
                         helperStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
@@ -45,8 +54,10 @@ class ExploreTab extends GetWidget<ExploreController> {
                           color: Color(0xffB9BABC),
                         ),
                       ),
-                      controller: controller.textSearchController,
-                      onEditingComplete: () => controller.search(),
+                      controller: textSearchController,
+                      onEditingComplete: () => ref
+                          .read(exploreProvider.notifier)
+                          .search(textSearchController.text),
                     ),
                   ),
                   SizedBox(
@@ -57,66 +68,67 @@ class ExploreTab extends GetWidget<ExploreController> {
                         Icons.search,
                         color: Color(0xffB9BABC),
                       ),
-                      onTap: () => controller.search(),
+                      onTap: () => ref
+                          .read(exploreProvider.notifier)
+                          .search(textSearchController.text),
                     ),
                   ),
                 ],
               ),
             ),
-            Obx(
-              () => SliverToBoxAdapter(
-                child: controller.searchComplete.value
-                    ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              'searchResult'.tr,
-                              style: Get.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                letterSpacing: 0.27,
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.clear),
-                              onPressed: () {
-                                controller.clearSearch();
-                                controller.clearTextField();
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container(),
-              ),
+            SliverToBoxAdapter(
+              child: exploreState.searchComplete
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'searchResult'.tr(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  letterSpacing: 0.27,
+                                ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              ref.read(exploreProvider.notifier).clearSearch();
+                              textSearchController.clear();
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(),
             ),
-            Obx(
-              () => SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 16,
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    (controller.searchComplete.value &&
-                            controller.mangaSearchResult.isEmpty)
-                        ? <Widget>[
-                            Text(
-                              'noResult'.tr,
-                              style: Get.textTheme.bodySmall,
-                            )
-                          ]
-                        : <Widget>[] +
-                            List.generate(
-                              controller.mangaSearchResult.length,
-                              (index) => MangaCard(
-                                metaCombine:
-                                    controller.mangaSearchResult[index],
-                              ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 16,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  (exploreState.searchComplete &&
+                          exploreState.mangaSearchResult.isEmpty)
+                      ? <Widget>[
+                          Text(
+                            'noResult'.tr(),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          )
+                        ]
+                      : <Widget>[] +
+                          List.generate(
+                            exploreState.mangaSearchResult.length,
+                            (index) => MangaCard(
+                              metaCombine:
+                                  exploreState.mangaSearchResult[index],
                             ),
-                    addRepaintBoundaries: false,
-                  ),
+                          ),
+                  addRepaintBoundaries: false,
                 ),
               ),
             ),
@@ -131,17 +143,22 @@ class ExploreTab extends GetWidget<ExploreController> {
                     Row(
                       children: [
                         Text(
-                          'randomManga'.tr,
-                          style: Get.textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            letterSpacing: 0.27,
-                          ),
+                          'randomManga'.tr(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                letterSpacing: 0.27,
+                              ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.refresh_rounded),
-                          onPressed: () => controller.getRandomManga(
-                              delayedDuration: const Duration(seconds: 0)),
+                          onPressed: () => ref
+                              .read(exploreProvider.notifier)
+                              .getRandomManga(
+                                  delayedDuration: const Duration(seconds: 0)),
                         ),
                       ],
                     ),
@@ -149,48 +166,46 @@ class ExploreTab extends GetWidget<ExploreController> {
                 ),
               ),
             ),
-            GetBuilder<ExploreController>(
-              builder: (controller) => SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: List<Widget>.from(
-                      List.generate(
-                        controller.sourceRepositories.length,
-                        (index) => GestureDetector(
-                          child: SourceTabChip(
-                            label: controller.sourceRepositories[index].slug,
-                            selected: controller.sourceSelected == index,
-                          ),
-                          onTap: () {
-                            if (controller.sourceSelected != index) {
-                              controller.changeSourceTab(index);
-                            }
-                          },
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: List<Widget>.from(
+                    List.generate(
+                      exploreState.sourceRepositories.length,
+                      (index) => GestureDetector(
+                        child: SourceTabChip(
+                          label: exploreState.sourceRepositories[index].slug,
+                          selected: exploreState.sourceSelected == index,
                         ),
+                        onTap: () {
+                          if (exploreState.sourceSelected != index) {
+                            ref
+                                .read(exploreProvider.notifier)
+                                .changeSourceTab(index);
+                          }
+                        },
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            Obx(
-              () => SliverPadding(
-                padding:
-                    const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 8),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    List.generate(
-                      controller.randomMangaList.length,
-                      (index) => MangaCard(
-                        metaCombine: controller.randomMangaList[index],
-                      ),
+            SliverPadding(
+              padding:
+                  const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 8),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  List.generate(
+                    exploreState.randomMangaList.length,
+                    (index) => MangaCard(
+                      metaCombine: exploreState.randomMangaList[index],
                     ),
-                    addRepaintBoundaries: false,
                   ),
+                  addRepaintBoundaries: false,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

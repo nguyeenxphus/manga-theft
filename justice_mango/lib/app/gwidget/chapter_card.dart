@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:justice_mango/app/data/model/chapter_info.dart';
 import 'package:justice_mango/app/data/model/manga_meta_combine.dart';
-import 'package:justice_mango/app/modules/manga_detail/manga_detail_controller.dart';
+import 'package:justice_mango/app/modules/manga_detail/manga_detail_provider.dart';
 import 'package:justice_mango/app/modules/reader/reader_screen.dart';
 import 'package:justice_mango/app/modules/reader/reader_screen_args.dart';
 
-class ChapterCard extends StatelessWidget {
+class ChapterCard extends ConsumerWidget {
   final List<ChapterInfo> chaptersInfo;
   final int index;
   final MangaMetaCombine metaCombine;
@@ -21,21 +22,29 @@ class ChapterCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () {
-        Get.to(
-          () => ReaderScreen(
-            readerScreenArgs: ReaderScreenArgs(
-              metaCombine: metaCombine,
-              chaptersInfo: chaptersInfo,
-              index: index,
-            ),
+        // Get.to(
+        //   () => ReaderScreen(
+        //     readerScreenArgs: ReaderScreenArgs(
+        //       metaCombine: metaCombine,
+        //       chaptersInfo: chaptersInfo,
+        //       index: index,
+        //     ),
+        //   ),
+        // );
+        GoRouter.of(context).go(
+          ReaderScreen.routeName,
+          extra: ReaderScreenArgs(
+            metaCombine: metaCombine,
+            chaptersInfo: chaptersInfo,
+            index: index,
           ),
         );
-        MangaDetailController mangaDetailController =
-            Get.find(tag: metaCombine.mangaMeta.preId);
-        mangaDetailController.addToRecentRead();
+        final mangaDetailNotifier =
+            ref.read(mangaDetailProvider(metaCombine).notifier);
+        mangaDetailNotifier.addToRecentRead();
       },
       child: Card(
         margin: const EdgeInsets.symmetric(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:justice_mango/app/data/model/manga_meta_combine.dart';
 import 'package:justice_mango/app/modules/manga_detail/manga_detail_screen.dart';
 import 'package:justice_mango/app/util/layout_constants.dart';
@@ -22,10 +22,14 @@ class MangaCard extends StatelessWidget {
         // Get.toNamed(Routes.MANGA_DETAIL, arguments: {
         //   'metaCombine': metaCombine,
         // });
-        Get.to(
-          () => MangaDetailScreen(
-            metaCombine: metaCombine,
-          ),
+        // Get.to(
+        //   () => MangaDetailScreen(
+        //     metaCombine: metaCombine,
+        //   ),
+        // );
+        GoRouter.of(context).go(
+          MangaDetailScreen.routeName,
+          extra: metaCombine,
         );
       },
       child: Container(

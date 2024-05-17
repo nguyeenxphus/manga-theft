@@ -12,22 +12,19 @@ import '../../../repository/http_repository.dart';
 
 class MangoCollMangaProvider extends MangaProvider {
   @override
-  final nametag = 'storynap';
+  final nametag = 'portlycat';
   @override
   final locale = const Locale('vi', 'VN');
   HttpRepository? httpRepo;
-  final baseUrl = 'https://mango.storynap.com';
-  Map<String, String> defaultImageHeader = {
-    "Referer": "https://www.nettruyen.com/"
-  };
+  final baseUrl = 'https://mango.portlycat.com';
+  Map<String, String> defaultImageHeader = {"Referer": "https://www.nettruyencc.com/"};
 
   MangoCollMangaProvider() {
     httpRepo = HttpRepository(MangoCollHttpProvider());
     httpRepo!.get('$baseUrl/nt/info').then((resp) {
       if (resp.statusCode == 200) {
         try {
-          defaultImageHeader =
-              Map<String, String>.from(resp.data['option']['imageHeader']);
+          defaultImageHeader = Map<String, String>.from(resp.data['option']['imageHeader']);
         } catch (e) {
           //
         }

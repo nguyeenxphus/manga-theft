@@ -3,15 +3,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:justice_mango/app/gwidget/manga_frame.dart';
+import 'package:justice_mango/app/modules/home/tab/recent/recent_provider.dart';
 import 'package:justice_mango/app/modules/manga_detail/manga_detail_screen.dart';
 import 'package:justice_mango/app/theme/color_theme.dart';
 
-import 'recent_agrs.dart';
+// import 'recent_agrs.dart';
 
 class RecentCard extends StatelessWidget {
-  final RecentArgs recentArgs;
+  final RecentStateData recentStateData;
 
-  const RecentCard({Key? key, required this.recentArgs}) : super(key: key);
+  const RecentCard({Key? key, required this.recentStateData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class RecentCard extends StatelessWidget {
       onTap: () {
         Get.to(
           () => MangaDetailScreen(
-            metaCombine: recentArgs.mangaMetaCombine,
+            metaCombine: recentStateData.mangaMetaCombine,
           ),
         );
       },
@@ -41,7 +42,7 @@ class RecentCard extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(
-                    recentArgs.mangaMetaCombine.mangaMeta.imgUrl ?? ''),
+                    recentStateData.mangaMetaCombine.mangaMeta.imgUrl ?? ''),
                 fit: BoxFit.cover,
               ),
             ),
@@ -58,9 +59,9 @@ class RecentCard extends StatelessWidget {
                     Stack(
                       children: [
                         MangaFrame(
-                          imageUrl:
-                              recentArgs.mangaMetaCombine.mangaMeta.imgUrl ??
-                                  '',
+                          imageUrl: recentStateData
+                                  .mangaMetaCombine.mangaMeta.imgUrl ??
+                              '',
                           width: MediaQuery.of(context).size.width / 3,
                         ),
                         Positioned(
@@ -76,7 +77,7 @@ class RecentCard extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 0),
                             child: Text(
-                              recentArgs.mangaMetaCombine.mangaMeta.lang,
+                              recentStateData.mangaMetaCombine.mangaMeta.lang,
                               style: Get.textTheme.bodyMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
@@ -97,12 +98,13 @@ class RecentCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  recentArgs.mangaMetaCombine.mangaMeta.title ??
+                                  recentStateData
+                                          .mangaMetaCombine.mangaMeta.title ??
                                       '',
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Text(
-                                  recentArgs
+                                  recentStateData
                                           .mangaMetaCombine.mangaMeta.author ??
                                       '',
                                   style: Theme.of(context).textTheme.bodyMedium,
@@ -110,7 +112,7 @@ class RecentCard extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 16),
                                   child: Text(
-                                    recentArgs.mangaMetaCombine.mangaMeta
+                                    recentStateData.mangaMetaCombine.mangaMeta
                                             .description ??
                                         '',
                                     maxLines: 5,
@@ -131,11 +133,11 @@ class RecentCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'lastRead'.tr + recentArgs.chapterName,
+                                  'lastRead'.tr + recentStateData.chapterName,
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 Text(
-                                  timeCalculate(recentArgs.dateTime),
+                                  timeCalculate(recentStateData.dateTime),
                                   style: Theme.of(context).textTheme.bodySmall,
                                 )
                               ],

@@ -41,7 +41,7 @@ class MangaMeta extends Equatable {
   @HiveField(9)
   final String lang;
 
-  @JsonKey(defaultValue: "vi>storynap>")
+  @JsonKey(defaultValue: "vi>portlycat>")
   @HiveField(10)
   final String repoSlug;
 

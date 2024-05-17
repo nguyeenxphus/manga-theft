@@ -59,7 +59,7 @@ class SourceService {
   static loadSources() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> sourcesSlug =
-        prefs.getStringList('sources') ?? (['vi>storynap>']);
+        prefs.getStringList('sources') ?? (['vi>portlycat>']);
     for (var slug in sourcesSlug) {
       for (var repo in allSourceRepositories) {
         if (repo.slug == slug) {
