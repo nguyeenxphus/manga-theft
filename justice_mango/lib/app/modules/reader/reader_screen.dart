@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:manga_theft/app/gwidget/loading_widget.dart';
 import 'package:manga_theft/app/modules/reader/reader_controller.dart';
 import 'package:manga_theft/app/modules/reader/reader_screen_args.dart';
 import 'package:manga_theft/app/modules/reader/widget/manga_image.dart';
@@ -10,8 +11,7 @@ import 'package:random_string/random_string.dart';
 class ReaderScreen extends StatefulWidget {
   final ReaderScreenArgs readerScreenArgs;
 
-  const ReaderScreen({Key? key, required this.readerScreenArgs})
-      : super(key: key);
+  const ReaderScreen({Key? key, required this.readerScreenArgs}) : super(key: key);
 
   @override
   State<ReaderScreen> createState() => _ReaderScreenState();
@@ -74,16 +74,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                 Obx(
                   () => controller.loading.value
                       ? const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.all(48.0),
-                            child: Center(
-                              child: SizedBox(
-                                width: 48,
-                                height: 48,
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                          ),
+                          child: LoadingWidget(),
                         )
                       : SliverList(
                           delegate: SliverChildListDelegate(
@@ -104,6 +95,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                                 : [
                                     Column(
                                       mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: List.generate(
                                         controller.imgUrls.length,
                                         (index) => MangaImage(

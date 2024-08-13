@@ -8,8 +8,7 @@ class BackgroundContext {
     return _initMetadata(repositorySlug);
   }
 
-  static Future<List<MangaMeta>> getMangaList(
-      MangaRepository repo, int page) async {
+  static Future<List<MangaMeta>> getMangaList(MangaRepository repo, int page) async {
     //  return await compute(_getMangaList, {"slug": repo.slug, "page": page});
     return _getMangaList({"slug": repo.slug, "page": page});
   }

@@ -8,11 +8,11 @@ class HttpRepository {
     provider.init();
   }
 
-  Future<Response> get(String url, {dynamic query}) async {
-    return await provider.get(url, query: query);
+  Future<Response> get(String url, {dynamic query, Map<String, String>? headers}) async {
+    return await provider.get(url, query: query, headers: headers);
   }
 
-  Future<Response> post(String url, {dynamic data}) async {
-    return await provider.post(url, data: data);
+  Future<Response> post(String url, {dynamic data, Map<String, String>? headers}) async {
+    return await provider.post(url, data: data, headers: headers);
   }
 }

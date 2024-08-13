@@ -4,7 +4,7 @@ class NettruyenHttpProvider extends HttpProvider {
   final baseUrl = 'www.nettruyen.com';
 
   @override
-  void init() {
+  Future<void> init() async {
     dio.options.headers['Referer'] = 'https://$baseUrl/';
     dio.options.headers['Origin'] = 'https://$baseUrl';
     // dio.options.headers['User-Agent'] =

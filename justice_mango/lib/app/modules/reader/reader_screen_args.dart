@@ -7,9 +7,5 @@ class ReaderScreenArgs {
   final List<ChapterInfo> chaptersInfo;
   final int index;
 
-  ReaderScreenArgs(
-      {this.preloadUrl,
-      required this.metaCombine,
-      required this.chaptersInfo,
-      this.index = 0});
+  ReaderScreenArgs({this.preloadUrl, required this.metaCombine, required this.chaptersInfo, this.index = 0});
 }

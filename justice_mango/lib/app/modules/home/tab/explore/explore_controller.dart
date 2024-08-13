@@ -27,9 +27,7 @@ class ExploreController extends GetxController {
 
   search() async {
     String textSearch = textSearchController.text;
-    if (textSearch.length <= 2 ||
-        (textSearch == currentSearch && searchComplete.value) ||
-        searching) {
+    if (textSearch.length <= 2 || (textSearch == currentSearch && searchComplete.value) || searching) {
       return;
     }
     clearSearch();
@@ -56,8 +54,7 @@ class ExploreController extends GetxController {
     textSearchController.text = '';
   }
 
-  getRandomManga(
-      {Duration delayedDuration = const Duration(seconds: 2)}) async {
+  getRandomManga({Duration delayedDuration = const Duration(seconds: 2)}) async {
     // note: wait hive db init first time
     await Future.delayed(delayedDuration);
     randomMangaList.clear();

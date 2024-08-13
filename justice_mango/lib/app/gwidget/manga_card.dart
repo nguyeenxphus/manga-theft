@@ -52,8 +52,7 @@ class MangaCard extends StatelessWidget {
             ),
             child: Container(
               decoration: LayoutConstants.backcardMangaBoxDecoration,
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 16),
+              padding: const EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 16),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

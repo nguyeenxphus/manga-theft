@@ -16,11 +16,8 @@ class BoardController extends GetxController {
   List<MangaMetaCombine> favoriteUpdate = <MangaMetaCombine>[].obs;
   int sourceSelected = 0;
   List<MangaRepository> sourceRepositories = <MangaRepository>[].obs;
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
-  var avatarSvg =
-      '<svg xmlns="https://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"></svg>'
-          .obs;
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+  var avatarSvg = '<svg xmlns="https://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"></svg>'.obs;
   int page = 1;
   var hasError = false.obs;
 
@@ -54,12 +51,10 @@ class BoardController extends GetxController {
   onRefresh() async {
     page = 1;
     try {
-      var tmp =
-          await sourceRepositories[sourceSelected].getLatestManga(page: page);
+      var tmp = await sourceRepositories[sourceSelected].getLatestManga(page: page);
       mangaBoard.clear();
       for (var mangaMeta in tmp) {
-        mangaBoard.add(
-            MangaMetaCombine(SourceService.sourceRepositories[0], mangaMeta));
+        mangaBoard.add(MangaMetaCombine(SourceService.sourceRepositories[0], mangaMeta));
       }
     } catch (e, stacktrace) {
       if (kDebugMode) {
@@ -103,9 +98,7 @@ class BoardController extends GetxController {
     var favoriteMetas = HiveService.favoriteBox.values.toList();
     // get instantly
     for (var mangaMeta in favoriteMetas) {
-      if (HiveService.getReadInfo(mangaMeta.repoSlug + mangaMeta.preId)
-              ?.newUpdate ??
-          false) {
+      if (HiveService.getReadInfo(mangaMeta.repoSlug + mangaMeta.preId)?.newUpdate ?? false) {
         for (var repo in SourceService.allSourceRepositories) {
           if (repo.slug == mangaMeta.repoSlug) {
             if (repo.isExceptionalFavorite(mangaMeta.preId)) {
@@ -124,16 +117,15 @@ class BoardController extends GetxController {
           var chapterList = await repo.updateLastReadInfo(
             mangaMeta: mangaMeta,
             updateStatus: true,
+            xClientId: "",
           );
 
           // update latest chapters on favorite screen
           FavoriteController favoriteController = Get.find();
-          favoriteController.latestChapters[mangaMeta.url] =
-              chapterList.first.name ?? '';
+          favoriteController.latestChapters[mangaMeta.url] = chapterList.first.name ?? '';
           favoriteController.update();
 
-          if (HiveService.getReadInfo(repo.slug + mangaMeta.preId)?.newUpdate ??
-              false) {
+          if (HiveService.getReadInfo(repo.slug + mangaMeta.preId)?.newUpdate ?? false) {
             if (!favoriteUpdate.contains(MangaMetaCombine(repo, mangaMeta)) &&
                 !repo.isExceptionalFavorite(mangaMeta.preId)) {
               favoriteUpdate.add(MangaMetaCombine(repo, mangaMeta));

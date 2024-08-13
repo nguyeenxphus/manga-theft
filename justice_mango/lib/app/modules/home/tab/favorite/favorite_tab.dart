@@ -53,16 +53,14 @@ class FavoriteTab extends GetWidget<FavoriteController> {
                         ),
                       ),
                     )
-                  : (controller.cardStyle.value ==
-                          FavoriteCardStyle.shortMangaCard
+                  : (controller.cardStyle.value == FavoriteCardStyle.shortMangaCard
                       ? MasonryGridView.count(
                           padding: const EdgeInsets.only(top: 3.0),
                           itemCount: controller.favoriteMetaCombine.length,
                           crossAxisCount: 2,
                           itemBuilder: (context, index) {
                             return ShortMangaCard(
-                              metaCombine:
-                                  controller.favoriteMetaCombine[index],
+                              metaCombine: controller.favoriteMetaCombine[index],
                             );
                           },
                           shrinkWrap: true,
@@ -73,12 +71,10 @@ class FavoriteTab extends GetWidget<FavoriteController> {
                             return ListView.builder(
                               itemBuilder: (context, index) {
                                 return ShortMangaBar(
-                                  metaCombine:
-                                      controller.favoriteMetaCombine[index],
-                                  latestChapter: controller.latestChapters[
-                                          controller.favoriteMetaCombine[index]
-                                              .mangaMeta.url] ??
-                                      "🦉",
+                                  metaCombine: controller.favoriteMetaCombine[index],
+                                  latestChapter:
+                                      controller.latestChapters[controller.favoriteMetaCombine[index].mangaMeta.url] ??
+                                          "🦉",
                                 );
                               },
                               itemCount: controller.favoriteMetaCombine.length,

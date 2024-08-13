@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:manga_theft/app/data/model/manga_meta_combine.dart';
 import 'package:manga_theft/app/gwidget/chapter_card.dart';
+import 'package:manga_theft/app/gwidget/loading_widget.dart';
 import 'package:manga_theft/app/gwidget/manga_frame.dart';
 import 'package:manga_theft/app/gwidget/tag.dart';
 import 'package:manga_theft/app/modules/manga_detail/manga_detail_controller.dart';
@@ -12,8 +13,7 @@ import 'package:manga_theft/app/util/layout_constants.dart';
 class MangaDetailScreen extends StatefulWidget {
   final MangaMetaCombine metaCombine;
 
-  const MangaDetailScreen({Key? key, required this.metaCombine})
-      : super(key: key);
+  const MangaDetailScreen({Key? key, required this.metaCombine}) : super(key: key);
 
   @override
   State<MangaDetailScreen> createState() => _MangaDetailScreenState();
@@ -49,14 +49,7 @@ class _MangaDetailScreenState extends State<MangaDetailScreen> {
               () => SliverList(
                 delegate: SliverChildListDelegate(
                   controller.chaptersInfo.isEmpty
-                      ? [
-                          const Padding(
-                            padding: EdgeInsets.all(24.0),
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
-                        ]
+                      ? [const LoadingWidget()]
                       : List.generate(
                           controller.chaptersInfo.length,
                           (index) {
@@ -194,8 +187,7 @@ class _MangaDetailScreenState extends State<MangaDetailScreen> {
               Icons.play_arrow_rounded,
               color: Colors.white,
             ),
-            backgroundColor:
-                controller.chaptersInfo.isEmpty ? notWhite : mainColorSecondary,
+            backgroundColor: controller.chaptersInfo.isEmpty ? notWhite : mainColorSecondary,
             onTap: controller.chaptersInfo.isEmpty
                 ? () {}
                 : () {
@@ -228,9 +220,7 @@ class _MangaDetailScreenState extends State<MangaDetailScreen> {
                 await controller.addToFavoriteBox();
               }
             },
-            label: controller.isFavorite.value
-                ? 'favorite!'.tr
-                : 'markFavorite'.tr,
+            label: controller.isFavorite.value ? 'favorite!'.tr : 'markFavorite'.tr,
             labelStyle: const TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.white,
@@ -257,13 +247,8 @@ class _MangaDetailScreenState extends State<MangaDetailScreen> {
                   await controller.markAsExceptionalFavorite();
                 }
               },
-              label: controller.isExceptional.value
-                  ? 'turnOnNotification'.tr
-                  : 'turnOffNotification'.tr,
-              labelStyle: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                  fontSize: 16.0),
+              label: controller.isExceptional.value ? 'turnOnNotification'.tr : 'turnOffNotification'.tr,
+              labelStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16.0),
               labelBackgroundColor: mainColorSecondary,
             ),
         ],

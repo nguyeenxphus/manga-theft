@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:manga_theft/app/gwidget/loading_widget.dart';
 import 'package:manga_theft/app/gwidget/manga_card.dart';
 import 'package:manga_theft/app/modules/home/home_controller.dart';
 import 'package:manga_theft/app/modules/home/tab/board/board_controller.dart';
@@ -58,9 +59,7 @@ class BoardTab extends GetWidget<BoardController> {
                   controller.favoriteUpdate.isEmpty
                       ? [Text('noUpdateFound'.tr)]
                       : List.generate(
-                          controller.favoriteUpdate.length > 5
-                              ? 5
-                              : controller.favoriteUpdate.length,
+                          controller.favoriteUpdate.length > 5 ? 5 : controller.favoriteUpdate.length,
                           (index) => MangaCard(
                             metaCombine: controller.favoriteUpdate[index],
                           ),
@@ -107,12 +106,7 @@ class BoardTab extends GetWidget<BoardController> {
                               ),
                             )
                           ]
-                        : [
-                            const Padding(
-                              padding: EdgeInsets.all(56.0),
-                              child: Center(child: CircularProgressIndicator()),
-                            )
-                          ]
+                        : [const LoadingWidget()]
                     : List.generate(
                         controller.mangaBoard.length,
                         (index) => MangaCard(

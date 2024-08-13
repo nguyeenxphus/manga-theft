@@ -2,7 +2,7 @@ import 'package:manga_theft/app/data/provider/http_provider.dart';
 
 class NeloHttpProvider extends HttpProvider {
   @override
-  void init() {
+  Future<void> init() async {
     dio.options.headers['Referer'] = 'https://www.manganelo.com/';
     dio.options.headers['Origin'] = 'https://www.manganelo.com';
     dio.options.headers['User-Agent'] =

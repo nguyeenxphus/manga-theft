@@ -33,8 +33,7 @@ class SettingBottomSheetState extends State<SettingBottomSheet> {
             ),
             for (var locale in SourceService.allLocalesSupported)
               CheckboxListTile(
-                value: locale.languageCode ==
-                    SourceService.selectedLocale.languageCode,
+                value: locale.languageCode == SourceService.selectedLocale.languageCode,
                 onChanged: (newValue) {
                   if (newValue ?? false) {
                     setState(() {

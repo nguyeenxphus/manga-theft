@@ -18,8 +18,7 @@ class ChapterInfo {
 
   ChapterInfo({required this.preChapterId, this.name, this.url});
 
-  factory ChapterInfo.fromJson(Map<String, dynamic> json) =>
-      _$ChapterInfoFromJson(json);
+  factory ChapterInfo.fromJson(Map<String, dynamic> json) => _$ChapterInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$ChapterInfoToJson(this);
 }

@@ -28,14 +28,13 @@ class RecentController extends GetxController {
         }
       }
 
-      List<ChapterInfo> chapterInfo =
-          await mangaMetaCombine.repo.updateLastReadInfo(
+      List<ChapterInfo> chapterInfo = await mangaMetaCombine.repo.updateLastReadInfo(
         mangaMeta: mangaMetaCombine.mangaMeta,
         updateStatus: false,
+        xClientId: "",
       );
 
-      int? readIndex = mangaMetaCombine.repo
-          .getLastReadIndex(mangaMetaCombine.mangaMeta.preId);
+      int? readIndex = mangaMetaCombine.repo.getLastReadIndex(mangaMetaCombine.mangaMeta.preId);
 
       recentArgs.add(
         RecentArgs(

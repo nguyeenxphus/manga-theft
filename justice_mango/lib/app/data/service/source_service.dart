@@ -58,8 +58,7 @@ class SourceService {
 
   static loadSources() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> sourcesSlug =
-        prefs.getStringList('sources') ?? (['vi>storynap>']);
+    List<String> sourcesSlug = prefs.getStringList('sources') ?? (['vi>storynap>']);
     for (var slug in sourcesSlug) {
       for (var repo in allSourceRepositories) {
         if (repo.slug == slug) {
@@ -83,10 +82,8 @@ class SourceService {
 
   static Future<Locale> loadLocale() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String langCode = prefs.getString('langCode') ??
-        (Get.deviceLocale?.languageCode == 'vi' ? 'vi' : 'en');
-    String countryCode = prefs.getString('countryCode') ??
-        (Get.deviceLocale?.languageCode == 'vi' ? 'VN' : 'US');
+    String langCode = prefs.getString('langCode') ?? (Get.deviceLocale?.languageCode == 'vi' ? 'vi' : 'en');
+    String countryCode = prefs.getString('countryCode') ?? (Get.deviceLocale?.languageCode == 'vi' ? 'VN' : 'US');
     return Locale(langCode, countryCode);
     // Get.deviceLocale.languageCode == 'vi' ? Locale('vi', 'VN') : Locale('en', 'US')
   }

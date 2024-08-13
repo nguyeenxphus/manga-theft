@@ -45,18 +45,8 @@ class MangaMeta extends Equatable {
   @HiveField(10)
   final String repoSlug;
 
-  const MangaMeta.z(
-      this.alias,
-      this.author,
-      this.description,
-      this.preId,
-      this.imgUrl,
-      this.status,
-      this.tags,
-      this.title,
-      this.url,
-      this.lang,
-      this.repoSlug);
+  const MangaMeta.z(this.alias, this.author, this.description, this.preId, this.imgUrl, this.status, this.tags,
+      this.title, this.url, this.lang, this.repoSlug);
 
   const MangaMeta({
     this.alias,
@@ -72,14 +62,12 @@ class MangaMeta extends Equatable {
     required this.repoSlug,
   });
 
-  factory MangaMeta.fromJson(Map<String, dynamic> json) =>
-      _$MangaMetaFromJson(json);
+  factory MangaMeta.fromJson(Map<String, dynamic> json) => _$MangaMetaFromJson(json);
 
   Map<String, dynamic> toJson() => _$MangaMetaToJson(this);
 
   @override
   List<Object> get props => [url, imgUrl ?? ""];
 
-  MangaMeta clone() => MangaMeta.z(alias, author, description, preId, imgUrl,
-      status, tags, title, url, lang, repoSlug);
+  MangaMeta clone() => MangaMeta.z(alias, author, description, preId, imgUrl, status, tags, title, url, lang, repoSlug);
 }

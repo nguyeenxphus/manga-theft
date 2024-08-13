@@ -11,8 +11,7 @@ class FavoriteController extends GetxController {
   var favoriteMangas = <MangaMeta>[];
   var favoriteMetaCombine = <MangaMetaCombine>[].obs;
   var cardStyle = FavoriteCardStyle.shortMangaCard.obs;
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController refreshController = RefreshController(initialRefresh: false);
   late SharedPreferences sharedPreferences;
   var latestChapters = <String, String>{}.obs;
 
@@ -46,8 +45,7 @@ class FavoriteController extends GetxController {
     // for (var meta in favoriteMetaCombine) {
     //   print(meta.mangaMeta.title);
     // }
-    favoriteMetaCombine.sort(
-        (a, b) => (a.mangaMeta.title?.compareTo(b.mangaMeta.title ?? '')) ?? 0);
+    favoriteMetaCombine.sort((a, b) => (a.mangaMeta.title?.compareTo(b.mangaMeta.title ?? '')) ?? 0);
     // print("--");
     // for (var meta in favoriteMetaCombine) {
     //   print(meta.mangaMeta.title);

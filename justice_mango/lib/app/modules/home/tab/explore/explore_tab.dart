@@ -99,8 +99,7 @@ class ExploreTab extends GetWidget<ExploreController> {
                 ),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate(
-                    (controller.searchComplete.value &&
-                            controller.mangaSearchResult.isEmpty)
+                    (controller.searchComplete.value && controller.mangaSearchResult.isEmpty)
                         ? <Widget>[
                             Text(
                               'noResult'.tr,
@@ -111,8 +110,7 @@ class ExploreTab extends GetWidget<ExploreController> {
                             List.generate(
                               controller.mangaSearchResult.length,
                               (index) => MangaCard(
-                                metaCombine:
-                                    controller.mangaSearchResult[index],
+                                metaCombine: controller.mangaSearchResult[index],
                               ),
                             ),
                     addRepaintBoundaries: false,
@@ -122,8 +120,7 @@ class ExploreTab extends GetWidget<ExploreController> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 0),
+                padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -140,8 +137,7 @@ class ExploreTab extends GetWidget<ExploreController> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.refresh_rounded),
-                          onPressed: () => controller.getRandomManga(
-                              delayedDuration: const Duration(seconds: 0)),
+                          onPressed: () => controller.getRandomManga(delayedDuration: const Duration(seconds: 0)),
                         ),
                       ],
                     ),
@@ -176,8 +172,7 @@ class ExploreTab extends GetWidget<ExploreController> {
             ),
             Obx(
               () => SliverPadding(
-                padding:
-                    const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 8),
+                padding: const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 8),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate(
                     List.generate(

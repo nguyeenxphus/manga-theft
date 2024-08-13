@@ -9,9 +9,7 @@ class ShortMangaBar extends StatelessWidget {
   final MangaMetaCombine metaCombine;
   final String latestChapter;
 
-  const ShortMangaBar(
-      {Key? key, required this.metaCombine, this.latestChapter = ''})
-      : super(key: key);
+  const ShortMangaBar({Key? key, required this.metaCombine, this.latestChapter = ''}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

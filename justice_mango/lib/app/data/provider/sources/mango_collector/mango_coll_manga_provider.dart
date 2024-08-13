@@ -17,26 +17,25 @@ class MangoCollMangaProvider extends MangaProvider {
   final locale = const Locale('vi', 'VN');
   HttpRepository? httpRepo;
   final baseUrl = 'https://mango.storynap.com';
-  Map<String, String> defaultImageHeader = {
-    "Referer": "https://www.nettruyen.com/"
-  };
+  Map<String, String> defaultImageHeader = {"Referer": "https://www.nettruyen.com/"};
 
   MangoCollMangaProvider() {
     httpRepo = HttpRepository(MangoCollHttpProvider());
     httpRepo!.get('$baseUrl/nt/v1/info').then((resp) {
       if (resp.statusCode == 200) {
         try {
-          defaultImageHeader =
-              Map<String, String>.from(resp.data['option']['imageHeader']);
+          defaultImageHeader = Map<String, String>.from(resp.data['option']['imageHeader']);
         } catch (_) {}
       }
     });
   }
 
   @override
-  Future<List<ChapterInfo>> getChaptersInfo(MangaMeta mangaMeta) async {
-    var resp =
-        await httpRepo!.get('$baseUrl/nt/v1/chapters/${mangaMeta.preId}');
+  Future<List<ChapterInfo>> getChaptersInfo(MangaMeta mangaMeta, {String? xClientId}) async {
+    var resp = await httpRepo!.get(
+      '$baseUrl/nt/v1/chapters/${mangaMeta.preId}',
+      headers: xClientId != null ? {'X-Client-Id': xClientId} : null,
+    );
     List<ChapterInfo> chapters = <ChapterInfo>[];
     for (var c in resp.data) {
       chapters.add(ChapterInfo.fromJson(c));
@@ -45,8 +44,11 @@ class MangoCollMangaProvider extends MangaProvider {
   }
 
   @override
-  Future<List<MangaMeta>> getLatestManga({page = 1}) async {
-    var resp = await httpRepo!.get('$baseUrl/nt/v1/latest/$page');
+  Future<List<MangaMeta>> getLatestManga({page = 1, String? xClientId}) async {
+    var resp = await httpRepo!.get(
+      '$baseUrl/nt/v1/latest/$page',
+      headers: xClientId != null ? {'X-Client-Id': xClientId} : null,
+    );
     List<MangaMeta> metas = <MangaMeta>[];
     if (resp.data != null) {
       for (var meta in resp.data) {
@@ -57,16 +59,19 @@ class MangoCollMangaProvider extends MangaProvider {
   }
 
   @override
-  Future<MangaMeta> getLatestMeta(MangaMeta mangaMeta) async {
+  Future<MangaMeta> getLatestMeta(MangaMeta mangaMeta, {String? xClientId}) async {
     return mangaMeta;
   }
 
   @override
-  Future<List<String>> getPages(String chapterUrl) async {
-    var resp = await httpRepo!.post('$baseUrl/nt/v1/pages',
-        data: FormData.fromMap({
-          'sourceUrl': chapterUrl,
-        }));
+  Future<List<String>> getPages(String chapterUrl, {String? xClientId}) async {
+    var resp = await httpRepo!.post(
+      '$baseUrl/nt/v1/pages',
+      data: FormData.fromMap({
+        'sourceUrl': chapterUrl,
+      }),
+      headers: xClientId != null ? {'X-Client-Id': xClientId} : null,
+    );
     return List<String>.from(resp.data);
   }
 
@@ -81,11 +86,14 @@ class MangoCollMangaProvider extends MangaProvider {
   }
 
   @override
-  Future<List<MangaMeta>> search(String searchString) async {
-    var resp = await httpRepo!.post('$baseUrl/nt/v1/search',
-        data: FormData.fromMap({
-          'searchTerm': searchString,
-        }));
+  Future<List<MangaMeta>> search(String searchString, {String? xClientId}) async {
+    var resp = await httpRepo!.post(
+      '$baseUrl/nt/v1/search',
+      data: FormData.fromMap({
+        'searchTerm': searchString,
+      }),
+      headers: xClientId != null ? {'X-Client-Id': xClientId} : null,
+    );
     List<MangaMeta> metas = <MangaMeta>[];
     if (resp.data != null) {
       for (var meta in resp.data) {
@@ -96,7 +104,7 @@ class MangoCollMangaProvider extends MangaProvider {
   }
 
   @override
-  Future<List<MangaMeta>> searchTag(String searchTag) {
+  Future<List<MangaMeta>> searchTag(String searchTag, {String? xClientId}) {
     // TODO: implement searchTag
     throw UnimplementedError();
   }

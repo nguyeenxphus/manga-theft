@@ -19,10 +19,7 @@ class ReaderController extends GetxController {
   late Rx<bool> loading;
 
   ReaderController(
-      {required this.chaptersInfo,
-      required this.index,
-      required this.metaCombine,
-      required this.preloadUrl}) {
+      {required this.chaptersInfo, required this.index, required this.metaCombine, required this.preloadUrl}) {
     imgUrls = <String>[].obs;
     hasError = false.obs;
     loading = false.obs;
@@ -40,8 +37,7 @@ class ReaderController extends GetxController {
       getPages();
     }
     getPreloadPages();
-    MangaDetailController mangaDetailController =
-        Get.find(tag: metaCombine.mangaMeta.preId);
+    MangaDetailController mangaDetailController = Get.find(tag: metaCombine.mangaMeta.preId);
     mangaDetailController.setIsRead(index);
   }
 
@@ -55,8 +51,7 @@ class ReaderController extends GetxController {
     //await Future.delayed(Duration(seconds: 2));
     loading.value = true;
     try {
-      imgUrls.assignAll(
-          await metaCombine.repo.getPages(chaptersInfo[index].url ?? ''));
+      imgUrls.assignAll(await metaCombine.repo.getPages(chaptersInfo[index].url ?? ''));
       hasError.value = false;
     } catch (e, stacktrace) {
       if (kDebugMode) {
@@ -116,8 +111,7 @@ class ReaderController extends GetxController {
         getPreloadPages();
       }
       refreshController.refreshCompleted();
-      MangaDetailController mangaDetailController =
-          Get.find(tag: metaCombine.mangaMeta.preId);
+      MangaDetailController mangaDetailController = Get.find(tag: metaCombine.mangaMeta.preId);
       mangaDetailController.setIsRead(index);
     } else {
       refreshController.refreshFailed();

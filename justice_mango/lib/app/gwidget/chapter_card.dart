@@ -33,8 +33,7 @@ class ChapterCard extends StatelessWidget {
             ),
           ),
         );
-        MangaDetailController mangaDetailController =
-            Get.find(tag: metaCombine.mangaMeta.preId);
+        MangaDetailController mangaDetailController = Get.find(tag: metaCombine.mangaMeta.preId);
         mangaDetailController.addToRecentRead();
       },
       child: Card(
