@@ -116,7 +116,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                       (index) => Container(
                         padding: const EdgeInsets.symmetric(vertical: 24),
                         child: const Text(
-                          "🦉 🦉 🦉 🦉 🦉",
+                          "🐱🦊🐯🐶🦁🐮🐷🐰🐹🐼",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
